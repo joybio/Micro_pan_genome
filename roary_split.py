@@ -33,7 +33,7 @@ import sys
 import os
 import time
 from collections import defaultdict
-
+import pandas as pd
 
 def parseArg():
     parser = argparse.ArgumentParser(description="Roary results")
@@ -91,6 +91,7 @@ def tax(Input, species_set):
 
 def gff_linkage(species_number, species_dict, thread, prokka_dir, align, out):
     number = {}
+    gene_df = []
     for i in species_number.keys():
         i_id = i.split("s__")
         number[i] = species_number[i]
@@ -103,15 +104,27 @@ def gff_linkage(species_number, species_dict, thread, prokka_dir, align, out):
         for j in species_dict[i]:
             os.system("ln -s {}/{}/{}.gff {}/{}.gff".format(prokka_dir, j, j, species_dir, j))
         out_dir = species_dir + "_roary"
-        if align == "T":
-            os.system("roary -s -p {} -r -f {} -v {}/*.gff".format(thread, out_dir, species_dir))
-        else:
-            os.system("roary -s -p {} -i 95 -cd 99 -r -f {} -e -n -v {}/*.gff".format(thread, out_dir, species_dir))
+        # if align == "T":
+        #     os.system("roary -s -p {} -r -f {} -v {}/*.gff".format(thread, out_dir, species_dir))
+        # else:
+        #     os.system("roary -s -p {} -i 95 -cd 99 -r -f {} -e -n -v {}/*.gff".format(thread, out_dir, species_dir))
+        summary = out_dir + "/" + "summary_statistics.txt"
+        with open(summary, "r") as f:
+            number_list = []
+            for pan in f:
+                pan = pan.strip().split("\t")
+                number_list.append(pan[2])
+            seq_array = pd.DataFrame(number_list,
+                                     index=["Core_genes", "Soft_core_genes", "Shell_genes", "Cloud_genes", "Total_genes"],
+                                     columns=[species_dir])
+        gene_df.append(seq_array)
+    #print(gene_df)
+    merge = pd.concat(gene_df, axis=1)
+    merge.to_csv('pan.summary.csv')
+
     with open(out, 'w') as o:
         for k in number.keys():
             o.write(k.replace("\t", "_") + "\t" + str(number[k]) + "\n")
-
-
 
 def main():
     args = parseArg()
