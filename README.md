@@ -1,6 +1,4 @@
-[TOC]
-
-# roary_split script
+# roary_split
 
 ## Birefing introduction
 
@@ -12,6 +10,7 @@ roary is a Rapid large-scale prokaryote pan genome analysis program. roary_split
 Before using this script, ensure that you have the following dependencies installed:
 
 python >=3.9
+
 
 prokka
 
