@@ -33,20 +33,23 @@ In species.txt, the quantity of each assembled MAG is documented. Meanwhile, tax
   python roary_split.py --help
   ```
   ```bash
-  usage: roary_split.py [-h] -i <file> --tax <file> -t <file> -p <file> -o <file> [--version]
+usage: roary_split.py [-h] -i <file> --tax <file> -t <file> --thread <file>
+                      --donotalign <file> -p <file> -o <file> [--version]
 
 Roary results
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -i <file>, --input <file>
                         Species file: species.txt.
   --tax <file>          Tax file: tax.bac120.summary.tsv.
   -t <file>, --threshold <file>
-                        Threshold of genome number, Default: 10.
+                        Number of genome, Default: 10.
+  --thread <file>       Number of threads, Default: 10.
+  --donotalign <file>   Do-not-align genes (roary), Default: T.
   -p <file>, --prokka <file>
-                        Prokka directory [ABS]. this directory is usde to link gff file
-                        into sub-directory and process roary.
+                        Prokka directory [ABS]. this directory is usde to link
+                        gff file into sub-directory and process roary.
   -o <file>, --out <file>
                         Output file.
   --version             Display version
