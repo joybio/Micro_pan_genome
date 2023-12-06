@@ -41,6 +41,10 @@ def parseArg():
                         help="Species file: species.txt.", metavar="<file>")
     parser.add_argument("--tax", type=str, required=True,
                         help="Tax file: tax.bac120.summary.tsv.", metavar="<file>")
+    parser.add_argument("-c","--cd", type=int, required=True,
+                        help="percentage of isolates a gene must be in to be core [99]. "
+                             "Note, if you change this param, please rewrite the Rscript to visualisation",
+                        metavar="<file>")
     parser.add_argument("-t", "--threshold", type=int, required=True, default=10,
                         help="Number of genome, Default: 10.", metavar="<file>")
     parser.add_argument("--thread", type=int, required=True, default=10,
@@ -48,7 +52,8 @@ def parseArg():
     parser.add_argument("--donotalign", type=str, required=True, default="T",
                         help="Do-not-align genes, Default: T.", metavar="<file>")
     parser.add_argument("-p", "--prokka", type=str, required=True,
-                        help="Prokka directory [ABS]. this directory is usde to link gff file into sub-directory and process roary.",
+                        help="Prokka directory [ABS]. "
+                             "this directory is usde to link gff file into sub-directory and process roary.",
                         metavar="<file>")
     parser.add_argument("-o", "--out", type=str, required=True,
                         help="Output file.", metavar="<file>")
@@ -89,7 +94,7 @@ def tax(Input, species_set):
     return species_dict
 
 
-def gff_linkage(species_number, species_dict, thread, prokka_dir, align, out):
+def gff_linkage(species_number, species_dict,cd, thread, prokka_dir, align, out):
     number = {}
     gene_df = []
     for i in species_number.keys():
@@ -104,10 +109,10 @@ def gff_linkage(species_number, species_dict, thread, prokka_dir, align, out):
         for j in species_dict[i]:
             os.system("ln -s {}/{}/{}.gff {}/{}.gff".format(prokka_dir, j, j, species_dir, j))
         out_dir = species_dir + "_roary"
-        # if align == "T":
-        #     os.system("roary -s -p {} -r -f {} -v {}/*.gff".format(thread, out_dir, species_dir))
-        # else:
-        #     os.system("roary -s -p {} -i 95 -cd 99 -r -f {} -e -n -v {}/*.gff".format(thread, out_dir, species_dir))
+        if align == "T":
+            os.system("roary -s -p {} -r -f {} -v {}/*.gff".format(thread, out_dir, species_dir))
+        else:
+            os.system("roary -s -p {} -i 95 -cd {} -r -f {} -e -n -v {}/*.gff".format(thread, cd, out_dir, species_dir))
         summary = out_dir + "/" + "summary_statistics.txt"
         with open(summary, "r") as f:
             number_list = []
@@ -123,6 +128,7 @@ def gff_linkage(species_number, species_dict, thread, prokka_dir, align, out):
     merge.to_csv('pan.summary.csv')
 
     with open(out, 'w') as o:
+        o.write("Species\tNumber\n")
         for k in number.keys():
             o.write(k.replace("\t", "_") + "\t" + str(number[k]) + "\n")
 
@@ -130,7 +136,7 @@ def main():
     args = parseArg()
     species_number, species_set = species_filter(Input=args.input, threshold=args.threshold)
     species_dict = tax(Input=args.tax, species_set=species_set)
-    gff_linkage(species_number=species_number, species_dict=species_dict,thread=args.thread,
+    gff_linkage(species_number=species_number, species_dict=species_dict,cd=args.cd, thread=args.thread,
                 prokka_dir=args.prokka, align=args.donotalign, out=args.out)
 
 

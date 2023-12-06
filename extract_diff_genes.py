@@ -76,7 +76,7 @@ def sequence_extract(Input, diff_gene_set, Out):
             if i.startswith(">"):
                 Id = i.strip().split(" ")
                 # print(Id[1])
-                seq_dict[Id[1]] += i
+                seq_dict[Id[1]] += i.replace(" ","_")
             else:
                 seq_dict[Id[1]] += i.strip()
     # print(seq_dict)
