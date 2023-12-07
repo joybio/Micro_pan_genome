@@ -55,11 +55,11 @@ optional arguments:
   --version             Display version
   ```
 
-#Contributing
+# Contributing
 If you'd like to contribute to this project, feel free to fork the repository and submit a pull request with your changes. We welcome any improvements or bug fixes.
 
-#License
+# License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-#Contact
+# Contact
 If you have any questions or encounter issues with the script, please contact joybio at [1806389316@pku.edu.cn].
