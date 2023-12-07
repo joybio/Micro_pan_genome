@@ -1,4 +1,4 @@
-# roary_split
+# pan_roary
 
 ## Birefing introduction
 
@@ -17,7 +17,7 @@ roary
 Example: 
 Basic usage:
   ```bash
-  python roary_split.py -i species.txt --tax tax.bac120.summary.tsv -t 10 -p roary/prokka/ -o number.xls
+  python pan_roary.py -i species.txt --tax tax.bac120.summary.tsv -t 10 -p roary/prokka/ -o number.xls
   ```
 
 #Output
@@ -30,13 +30,13 @@ In species.txt, the quantity of each assembled MAG is documented. Meanwhile, tax
 
 # Options
   ```bash
-  python roary_split.py --help
+  python pan_roary.py --help
   ```
   ```bash
-usage: roary_split.py [-h] -i <file> --tax <file> -t <file> --thread <file>
+usage: pan_roary.py [-h] -i <file> --tax <file> -t <file> --thread <file>
                       --donotalign <file> -p <file> -o <file> [--version]
 
-Roary results
+pan_roary results
 
 optional arguments:
   -h, --help            show this help message and exit
