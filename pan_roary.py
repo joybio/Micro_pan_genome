@@ -41,7 +41,7 @@ def parseArg():
                         help="Species file: species.txt.", metavar="<file>")
     parser.add_argument("--tax", type=str, required=True,
                         help="Tax file: tax.bac120.summary.tsv.", metavar="<file>")
-    parser.add_argument("-c","--cd", type=int, required=True,
+    parser.add_argument("-c","--cd", type=int, default=99,
                         help="percentage of isolates a gene must be in to be core [99]. "
                              "Note, if you change this param, please rewrite the Rscript to visualisation",
                         metavar="<file>")
@@ -94,7 +94,7 @@ def tax(Input, species_set):
     return species_dict
 
 
-def gff_linkage(species_number, species_dict,cd, thread, prokka_dir, align, out):
+def gff_linkage(species_number, species_dict, cd, thread, prokka_dir, align, out):
     number = {}
     gene_df = []
     for i in species_number.keys():
